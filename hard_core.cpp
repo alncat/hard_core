@@ -83,10 +83,10 @@ void mc_verlet::new_vlist(){
             cart_coord xr = {0, 0, 0};
             for(std::size_t k = 0; k < 3; k++){
                 xr[k] = sites_cart[i][k] - sites_cart[j][k];
-                if( xr[k] > box/2 ){
+                if( xr[k] > box/2. ){
                     xr[k] -= box;
                 }
-                else if( xr[k] < -box/2 ){
+                else if( xr[k] < -box/2. ){
                     xr[k] += box;
                 }
             }
@@ -166,7 +166,7 @@ void mc_verlet::optimize_delx(){
 //        move();
 //    }
     for(std::size_t i = 1; i <= 20; i++){
-        double del_x = critical_r*i/20.;
+        double del_x = critical_r*i/10.;
         std::size_t counter = 0;
         for(std::size_t j = 0; j < 10000; j++){
             if(move()){
@@ -262,14 +262,14 @@ void mc_verlet::sample(){
     for(std::size_t i = 0; i < sites_cart.size(); i++){
         for(std::size_t k = 0; k < vlist[i].size(); k++){
             std::size_t j = vlist[i][k];
-//            double radius = radius_square(sites_cart[i], sites_cart[j]);
-            cart_coord new_cart = {0,0,0};
-            new_cart[0] = sites_cart[i][0] - sites_cart[j][0];
-            new_cart[1] = sites_cart[i][1] - sites_cart[j][1];
-            new_cart[2] = sites_cart[i][2] - sites_cart[j][2];
-            double radius = new_cart[0]*new_cart[0] + new_cart[1]*new_cart[1] + new_cart[2]*new_cart[2];
+            double radius = radius_square(sites_cart[i], sites_cart[j]);
+//            cart_coord new_cart = {0,0,0};
+//            new_cart[0] = sites_cart[i][0] - sites_cart[j][0];
+//            new_cart[1] = sites_cart[i][1] - sites_cart[j][1];
+//            new_cart[2] = sites_cart[i][2] - sites_cart[j][2];
+//            double radius = new_cart[0]*new_cart[0] + new_cart[1]*new_cart[1] + new_cart[2]*new_cart[2];
             radius = sqrt(radius);
-            if(radius < rv){
+            if(radius <= rv){
                 int ig = int(radius/delg);
                 g_r[ig] += 1;
             }
